@@ -72,13 +72,6 @@ namespace NmBridgeWoocommerce{
 
                 $order     = wc_get_order($order_id); //Get Order details
                 $user      = $order->get_user();
-                $emailArgs = array(
-                    "user_email" => $user->user_email,
-                    "order_id"   => $order_id,
-                    "username"   => $user->username,
-                    "first_name" => $user->first_name,
-                    "last_name"  => $user->last_name
-                );
                 // WCS is active.
                 $subscription =0;
                 if (defined('WOOINT_WCS_VER')) {
@@ -102,11 +95,6 @@ namespace NmBridgeWoocommerce{
                         $membershipHandler = new WooIntMembershipHandler($this->plugin_name, $this->version);
                         $membershipHandler->handleMembsershipOrder($order, $user_id);
                     }
-
-                    //Added email send functionality here because it was send even on bulk purchase orders.
-                    include_once('emails/class-eb-woo-int-emailer.php');
-                    $pluginEmailer=  new EbWooIntSendEmailer();
-                    $pluginEmailer->sendCourseEnrollmentEmail($emailArgs);
                 } elseif ($subscription ===1) {
                     update_post_meta($order_id, '_is_processed', true);
                 }
@@ -553,23 +541,6 @@ namespace NmBridgeWoocommerce{
                             $suspend,
                             $unenroll
                         );
-
-                        $emailArgs = array(
-                            "user_email" => $user->user_email,
-                            "order_id"   => $order_id,
-                            "username"   => $user->user_login,
-                            "first_name" => $user->first_name,
-                            "last_name"  => $user->last_name
-                        );
-
-
-                        if (1 === $course_enrolled) {
-                           //Added email send functionality here because it was send even on bulk purchase orders.
-                            include_once('emails/class-eb-woo-int-emailer.php');
-                            $pluginEmailer=  new EbWooIntSendEmailer();
-                            $pluginEmailer->sendCourseEnrollmentEmail($emailArgs); 
-                        }
-
                     }
                 }
             } else {
@@ -592,22 +563,6 @@ namespace NmBridgeWoocommerce{
                             $suspend,
                             $unenroll
                         );
-
-                        $emailArgs = array(
-                            "user_email" => $user->user_email,
-                            "order_id"   => $order_id,
-                            "username"   => $user->user_login,
-                            "first_name" => $user->first_name,
-                            "last_name"  => $user->last_name
-                        );
-
-
-                        if (1 === $course_enrolled) {
-                           //Added email send functionality here because it was send even on bulk purchase orders.
-                            include_once('emails/class-eb-woo-int-emailer.php');
-                            $pluginEmailer=  new EbWooIntSendEmailer();
-                            $pluginEmailer->sendCourseEnrollmentEmail($emailArgs); 
-                        }
                     }
                 }
             }
